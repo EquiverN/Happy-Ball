@@ -16,6 +16,10 @@ public class PlayerController : MonoBehaviour
     [Header("Game Over")]
     [SerializeField] private float deathOffset = 1f;
 
+    [Header("Audio")]
+    private AudioSource audioSource;
+    [SerializeField] private AudioClip bounceSound;
+
     private Rigidbody2D rb;
     private float moveDirection;
     private float lastBounceTime;
@@ -23,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void OnEnable()
@@ -101,6 +106,11 @@ public class PlayerController : MonoBehaviour
 
         if (!IsTouchingTopOfPlatform(collision))
             return;
+
+        if (bounceSound != null)
+        {
+            audioSource.PlayOneShot(bounceSound);
+        }
 
         rb.linearVelocity = new Vector2(
             rb.linearVelocity.x,
