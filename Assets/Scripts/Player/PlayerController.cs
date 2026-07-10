@@ -44,6 +44,22 @@ public class PlayerController : MonoBehaviour
     {
         moveDirection = 0f;
 
+        // 1. LEER TECLADO (Funciona en PC, Editor y si conectas un teclado al celular)
+        if (Keyboard.current != null)
+        {
+            // Izquierda: Tecla A o Flecha Izquierda
+            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
+            {
+                moveDirection = -1f;
+            }
+            // Derecha: Tecla D o Flecha Derecha
+            else if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+            {
+                moveDirection = 1f;
+            }
+        }
+
+        // 2. LEER MOUSE (Solo para pruebas en el Editor de Unity)
 #if UNITY_EDITOR
         if (Mouse.current != null && Mouse.current.leftButton.isPressed)
         {
@@ -52,7 +68,9 @@ public class PlayerController : MonoBehaviour
             else
                 moveDirection = 1f;
         }
-#else
+#endif
+
+        // 3. LEER PANTALLA TÁCTIL (Para celulares Android e iOS)
         if (Touch.activeTouches.Count > 0)
         {
             var touch = Touch.activeTouches[0];
@@ -62,8 +80,8 @@ public class PlayerController : MonoBehaviour
             else
                 moveDirection = 1f;
         }
-#endif
 
+        // Sistema de Game Over
         float limiteInferior =
             Camera.main.transform.position.y -
             Camera.main.orthographicSize -
